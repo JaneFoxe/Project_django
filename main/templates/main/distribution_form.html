@@ -1,0 +1,37 @@
+{% extends "main/home.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+<form method="post" class="row">
+    {% csrf_token %}
+    <div class="col-md-6">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h3>Настройки рассылки</h3>
+            </div>
+            <div class="card-body">
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">
+                    {% if object %}
+                    Изменить
+                    {% else %}
+                    Создать
+                    {% endif %}
+                </button>
+                <a href="{% url 'distribution:distribution_list' %}" class="btn btn-warning">Отмена</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h3>Сообщения</h3>
+            </div>
+            <div class="card-body">
+                {{ formset.management_form }}
+                {{ formset.forms.0.as_p }}
+            </div>
+        </div>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

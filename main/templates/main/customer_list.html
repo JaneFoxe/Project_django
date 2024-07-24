@@ -1,0 +1,50 @@
+{% extends "main/home.html" %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h3 class="display-3">Список имеющихся клиентов</h1>
+</div>
+
+
+<div class="container col-10">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1>Клиенты</h1>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <table class="table text-center">
+
+                    <tr>
+                        <th><h6>ФИО клиента</h6></th>
+                        <th><h6>email клиента</h6></th>
+                        <th><h6>Комментарий</h6></th>
+                        <th><h6>Исправить данные</h6></th>
+                        <th><h6>Перейти к клиенту</h6></th>
+                        <th><h6>Удалить клиента</h6></th>
+                    </tr>
+                    {% for object in object_list %}
+                    <tr>
+                        <td><h6>{{ object.name }}</h6></td>
+                        <td><h6>{{ object.email }}</h6></td>
+                        <td><h6>{{ object.message }}</h6></td>
+
+                        <td><h6><a class="btn btn-lg btn-warning"
+                                   href="{% url 'main:customer_update' object.pk %}">Исправить</a></h6></td>
+                        <td><h6><a class="btn btn-lg btn-success"
+                                   href="{% url 'main:customer_detail' object.pk %}">Перейти</a></h6></td>
+                        <td><h6><a class="btn btn-lg btn-danger"
+                                   href="{% url 'main:customer_delete' object.pk %}">Удалить</a></h6></td>
+
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row text-right mt-4">
+        <div class="col-12">
+            <a class="p-2 btn btn-outline-primary btn-block btn-lg" href="{% url 'main:customer_create' %}">Создать
+                нового клиента</a>
+        </div>
+    </div>
+    {% endblock %}

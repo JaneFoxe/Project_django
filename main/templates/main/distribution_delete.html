@@ -1,0 +1,20 @@
+{% extends "main/home.html" %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object.owner == request.user or request.user.is_superuser or perms.distribution.delete_blogwriting %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>Хотите удалить рассылку №{{ object.pk }}?</p>
+                        <button type="submit" class="btn btn-success">Подтвердить</button>
+                        <a href="{% url 'main:distribution_list' %}" class="btn btn-warning">Отмена</a>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

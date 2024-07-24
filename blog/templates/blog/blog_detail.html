@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="col-12">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h3 class="display-3">Блог {{ object.title }}</h3>
+    </div>
+</div>
+
+<div class="col-12 text-center">
+    <table class="table table-striped">
+        <tr>
+            <th>Заголовок</th>
+            <th>Текст</th>
+            <th>Изображение</th>
+            <th>Просмотры</th>
+            <th>Дата публикации</th>
+        </tr>
+        <tr>
+            <td><p>{{ object.title }}</p></td>
+            <td>
+                <div style="max-width: 400px; word-wrap: break-word;">{{ object.text }}</div>
+            </td>
+            {% if object.image %}
+            <td>
+                <img class="card-img-top" style="max-width: 500px; max-height: 500px;" src="{{ object.image.url }}"
+                     alt="Изображение">
+            </td>
+            {% else %}
+            <td>
+                <p>Изображение отсутствует</p>
+            </td>
+            {% endif %}
+            <td><p>{{ object.count_of_view }}</p></td>
+            <td><p>{{ object.date }}</p></td>
+        </tr>
+    </table>
+    <div align="center"><a class="btn btn-outline-primary btn-lg" href="{% url 'distribution:clients_list' %}">Вернуться
+        на главную страницу</a></div>
+
+    {% endblock %}

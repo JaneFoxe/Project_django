@@ -1,0 +1,138 @@
+{% extends "main/home.html" %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h3 class="display-3">Страница контроля рассылок</h3>
+</div>
+
+<div class="container col-8 mt-2 mb-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1>Статистика</h1>
+        </div>
+        <div class="card-body">
+            <div class="row text-center ">
+                <div class="col-12">
+                    <table class="table">
+                        <tr>
+                            <th><h4>Количество рассылок</h4></th>
+                            <th><h4>Количество активных рассылок</h4></th>
+                            <th><h4>Количество уникальных клиентов</h4></th>
+                        </tr>
+                        <body>
+                        <tr>
+                            <td><h4>{{ all }}</h4></td>
+                            <td><h4>{{ active }}</h4></td>
+                            <td><h4>{{ clients_count }}</h4></td>
+                        </tr>
+                        </body>
+                    </table>
+                    <hr>
+                    <table class="table">
+                        <tr>
+                            <h3>Случайные статьи</h3>
+                            <th><h5>Статьи</h5></th>
+                            <th><h5>Подробнее</h5></th>
+                        </tr>
+                        <tbody>
+                        {% for article, pk in articles.items %}
+                        <tr>
+                            <td><h5>{{ article }}</h5></td>
+                            <td><a class="p-2 btn btn-primary"
+                                   href="{% url 'blog:detail' pk %}">Перейти к статье</a>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container col-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1>Рассылки</h1>
+        </div>
+        <div class="card-body">
+            <div class="col-12 text-center">
+                <table class="table">
+                    <tr>
+                        <th><h6>Время рассылки</h6></th>
+                        <th><h6>Статус рассылки</h6></th>
+                        <th><h6>Периодичность рассылки</h6></th>
+                        <th><h6>Владелец рассылки</h6></th>
+                        <th><h6>Подробности рассылки</h6></th>
+                        {% if perms.distribution.change_status %}
+                        <th><h6>Редактирование рассылки</h6></th>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <th><h6>Удаление рассылки</h6></th>
+                        {% endif %}
+                    </tr>
+                    {% for object in object_list %}
+                    {% if request.user.is_superuser %}
+                    <tr>
+                        <td><h6>{{ object.start_time }}</h6></td>
+                        <td><h6>{{ object.status }}</h6></td>
+                        <td><h6>{{ object.periodicity }}</h6></td>
+                        <th><h6>{{ object.owner }}</h6></th>
+                        <td><h6>
+                            <a href="{% url 'main:distribution_detail' object.pk %}"
+                               class="btn btn-lg btn-primary">Полная
+                                информация</a>
+                        </h6></td>
+                        <td><h6>
+                            <a class="btn btn-lg btn-warning"
+                               href="{% url 'main:distribution_edit' object.pk %}">Исправить</a>
+                        </h6></td>
+                        <td><h6>
+                            <a class="btn btn-lg btn-danger"
+                               href="{% url 'main:distribution_delete' object.pk %}">Удалить</a>
+                        </h6></td>
+                        {% elif perms.distribution.view_mailingsettings %}
+                    <tr>
+                        <td><h6>{{ object.start_time }}</h6></td>
+                        <td><h6>{{ object.status }}</h6></td>
+                        <td><h6>{{ object.periodicity }}</h6></td>
+                        <th><h6>{{ object.owner }}</h6></th>
+                        <td>
+                            <h6>
+                                <a href="{% url 'main:distribution_detail' object.pk %}"
+                                   class="btn btn-lg btn-primary">Полная
+                                    информация</a>
+                                <td><h6>
+                                    {% if perms.distribution.change_status %}
+                                    <a class="btn btn-lg btn-warning"
+                                       href="{% url 'main:distribution_edit' object.pk %}">Исправить</a>
+                                    {% endif %}
+                                </h6></td>
+                            </h6>
+                        </td>
+                        {% elif object.owner == request.user %}
+                    <tr>
+                        <td><h6>{{ object.start_time }}</h6></td>
+                        <td><h6>{{ object.status }}</h6></td>
+                        <td><h6>{{ object.periodicity }}</h6></td>
+                        <th><h6>{{ object.owner }}</h6></th>
+                        <td><h6>
+                            <a href="{% url 'main:distribution_detail' object.pk %}"
+                               class="btn btn-lg btn-primary">Полная
+                                информация</a>
+                        </h6></td>
+                        {% endif %}
+                        {% endfor %}
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row text-right mt-4">
+        <div class="col-12">
+            <a class="p-2 btn btn-outline-primary btn-block btn-lg" href="{% url 'main:distribution_create' %}">Создать
+                новую рассылку</a>
+        </div>
+    </div>
+    {% endblock %}
